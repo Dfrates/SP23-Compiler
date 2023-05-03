@@ -1,0 +1,217 @@
+/*
+Name: Daniel Frates
+Course: CS 4100
+Term: Spring 2023
+ */
+
+package ADT;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Interpreter {
+    private final ReserveTable optable;
+    private final  int maxStackSize = 100;
+
+    // constructor for Interpreter
+    public Interpreter() {
+        optable = new ReserveTable(maxStackSize);
+        initReserve(optable);
+    }
+
+    // initialize the reserve table
+    private void initReserve(ReserveTable optable){
+        optable.Add("STOP", 0);
+        optable.Add("DIV", 1);
+        optable.Add("MUL", 2);
+        optable.Add("SUB", 3);
+        optable.Add("ADD", 4);
+        optable.Add("MOV", 5);
+        optable.Add("PRINT", 6);
+        optable.Add("READ", 7);
+        optable.Add("JMP", 8);
+        optable.Add("JZ", 9);
+        optable.Add("JP", 10);
+        optable.Add("JN", 11);
+        optable.Add("JNZ", 12);
+        optable.Add("JNP", 13);
+        optable.Add("JNN", 14);
+        optable.Add("JINDR", 15);
+    }
+
+    // create a string for the quad table line
+    private String makeTraceString(int pc, int opcode,int op1,int op2,int op3 ){
+        String result = "PC = "+String.format("%04d", pc)+": "+(optable.LookupCode(opcode)
+                +"     ").substring(0,6)+String.format("%02d",op1)+
+                ", "+String.format("%02d",op2)+", "+String.format("%02d",op3);
+        return result;
+    }
+
+    // interpret the quads in the quad table
+    public void InterpretQuads(QuadTable Q, SymbolTable S, boolean TraceOn, String filename) {
+        // initialize the pc to 0
+        int pc = 0;
+        int opcode, op1, op2, op3;
+
+        // try with resources to write to the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))){
+
+            // loop through the quad table until the pc is at the end
+            while(pc < Q.NextQuad()){
+
+                // get the quad at the current pc
+                opcode = Q.GetQuad(pc)[0];
+                op1 = Q.GetQuad(pc)[1];
+                op2 = Q.GetQuad(pc)[2];
+                op3 = Q.GetQuad(pc)[3];
+
+                // if trace is on, print the trace string
+                // and write it to the file
+                if(TraceOn) {
+                    //System.out.println(makeTraceString(pc, opcode, op1, op2, op3));
+                    writer.write(makeTraceString(pc, opcode, op1, op2, op3) + "\n");
+                }
+                // switch statement to execute the correct operation
+                // based on the opcode
+                switch (optable.LookupCode(opcode)) {
+                    case "STOP":
+                        // stop the program
+                        System.out.println("Program terminated by STOP instruction");
+                        return;
+                    case "DIV":
+                        // divide op1 by op2 and store the result in op3
+                        S.UpdateSymbol(op3, S.GetUsage(op3), S.GetInt(op1) / S.GetInt(op2));
+                        pc++;
+                        break;
+                    case "MUL":
+                        // multiply op1 by op2 and store the result in op3
+                        S.UpdateSymbol(op3, S.GetUsage(op3), S.GetInt(op1) * S.GetInt(op2));
+                        pc++;
+                        break;
+                    case "SUB":
+                        // subtract op2 from op1 and store the result in op3
+                        S.UpdateSymbol(op3, S.GetUsage(op3), S.GetInt(op1) - S.GetInt(op2));
+                        pc++;
+                        break;
+                    case "ADD":
+                        // add op1 and op2 and store the result in op3
+                        S.UpdateSymbol(op3, S.GetUsage(op3), S.GetInt(op1) + S.GetInt(op2));
+                        pc++;
+                        break;
+                    case "MOV":
+                        // move op1 to op3
+                        S.UpdateSymbol(op3, S.GetUsage(op3), S.GetInt(op1));
+                        pc++;
+                        break;
+                    case "PRINT":
+                        // print the value of op3
+                        char dataType = S.GetDataType(op3);
+                        if (dataType == 'I') {
+                            System.out.print(S.GetInt(op3));
+                        } else if (dataType == 'F') {
+                            System.out.print(S.GetFloat(op3));
+                        } else { // dataType == 'S'
+                            // if the string is a line terminator, print a newline
+                            if (S.GetSymbol(op3).equalsIgnoreCase("line_terminator")) {
+                                System.out.println();
+                            } else {
+                                System.out.print(S.GetString(op3));
+                            }
+                        }
+                        pc++;
+                        break;
+                    case "READ":
+                        int readValInt = 0;
+                        float readValFloat = 0;
+                        String readValString = "";
+                        // Make a scanner to read from CONSOLE
+                        Scanner sc = new Scanner(System.in);
+                        // Put out a prompt to the user
+                        System.out.print('>');
+
+                        // Read the next value from the console
+                        if (sc.hasNextInt()) {
+                            readValInt = sc.nextInt();
+                            //Op3 has the SymbolTable index we need, update its value
+                            S.UpdateSymbol(op3,'V',readValInt);
+                        } else if (sc.hasNextFloat()) {
+                            readValFloat = sc.nextFloat();
+                            // Op3 has the SymbolTable index we need, update its value
+                            S.UpdateSymbol(op3,'V',readValFloat);
+                        } else if (sc.hasNextLine()) {
+                            readValString = sc.nextLine();
+                            // Op3 has the SymbolTable index we need, update its value
+                            S.UpdateSymbol(op3,'V',readValString);
+                        }
+                        pc++;
+                        break;
+                    case "JMP":
+                        // jump to the quad at op3
+                        pc = op3;
+                        break;
+                    case "JZ":
+                        // jump to the quad at op3 if op1 is 0
+                        if (S.GetInt(op1) == 0) {
+                            pc = op3;
+                        }
+                        break;
+                    case "JP":
+                        // jump to the quad at op3 if op1 is positive
+                        if (S.GetInt(op1) > 0) {
+                            pc = op3;
+                        } else {
+                            pc++;
+                        }
+                        break;
+                    case "JN":
+                        // jump to the quad at op3 if op1 is negative
+                        if (S.GetInt(op1) < 0) {
+                            pc = op3;
+                        } else {
+                            pc++;
+                        }
+                        break;
+                    case "JNZ":
+                        // jump to the quad at op3 if op1 is not 0
+                        if (S.GetInt(op1) != 0) {
+                            pc = op3;
+                        } else {
+                            pc++;
+                        }
+                        break;
+                    case "JNP":
+                        // jump to the quad at op3 if op1 is not positive
+                        if (S.GetInt(op1) <= 0) {
+                            pc = op3;
+                        } else {
+                            pc++;
+                        }
+                        break;
+                    case "JNN":
+                        // jump to the quad at op3 if op1 is not negative
+                        if (S.GetInt(op1) >= 0) {
+                            pc = op3;
+                        } else {
+                            pc++;
+                        }
+                        break;
+                    case "JINDR":
+                        // jump to the quad at the address stored in op1
+                        pc = S.GetInt(op3);
+                        break;
+                    default:
+                        System.out.println("Invalid opcode");
+                        return;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public int opCodeFor(String op) {
+        return optable.LookupName(op);
+    }
+
+}

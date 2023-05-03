@@ -1,0 +1,13 @@
+Index Name        Use Typ Value
+  0  |-1         |C  |I  |-1
+  1  |1          |C  |I  |1
+  2  |BAD3B      |P  |I  |0
+  3  |COUNT      |V  |I  |0
+  4  |TOTAL      |V  |I  |0
+  5  |STOP       |V  |I  |0
+  6  |12         |c  |I  |12
+  7  |I          |V  |I  |0
+  8  |20         |c  |I  |20
+  9  |15         |c  |I  |15
+ 10  |10         |c  |I  |10
+ 11  |12323      |c  |I  |12323

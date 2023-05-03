@@ -1,0 +1,43 @@
+unit diamonds;
+
+var i, j, k: integer;
+
+begin
+  for i := 1 to 10 do
+  begin
+    for j := 1 to i + 1 do
+      write("*");
+    writeln("")
+  end;
+
+  writeln("");
+
+  for i := 1 to 10 do
+  begin
+    for j := 1 to 11 - i do
+      write("*");
+    writeln("")
+  end;
+
+  writeln("");
+
+  k := 1;
+  repeat
+  begin
+    i := 1;
+    dowhile i < k
+    begin
+      write(" ");
+      i := i + 1
+    end;
+    j := 1;
+    dowhile j <= 10 - k
+    begin
+      write("*");
+      j := j + 1
+    end;
+    writeln("");
+    k := k + 1
+    end
+  until k > 10
+end.

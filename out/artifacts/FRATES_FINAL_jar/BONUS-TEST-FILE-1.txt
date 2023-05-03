@@ -1,0 +1,88 @@
+unit patterns;
+
+var i, j, k, n: integer;
+var t1, t2, d: integer;
+var total: integer;
+
+begin
+  t1 := 0;
+  t2 := 0;
+  d := 0;
+  write("Enter a number: ");
+  readln(n);
+  writeln();
+  if n < 2 then
+    begin
+        writeln("Number must be greater than 1");
+        writeln();
+        goto(0)
+    end;
+
+  writeln("Triangle 1:");
+  for i := 1 to n do
+  begin
+    for j := 1 to i + 1 do
+      write("*");
+      t1 := t1 + 1;
+    writeln()
+  end;
+
+  writeln();
+  writeln("Triangle 2:");
+  for i := 1 to n do
+  begin
+    for j := 1 to n - i + 1 do
+      write("*");
+      t2 := t2 + 1;
+    writeln()
+  end;
+
+  writeln();
+  writeln("Diamond:");
+  k := 1;
+  dowhile k <= n
+  begin
+    i := 1;
+    dowhile i < n - k + 1
+    begin
+      write(" ");
+      i := i + 1
+    end;
+    j := 1;
+    dowhile j <= 2 * k - 1
+    begin
+      write("*");
+      d := d + 1;
+      j := j + 1
+    end;
+    writeln();
+    k := k + 1
+  end;
+  k := n - 1;
+  dowhile k >= 1
+  begin
+    i := 1;
+    dowhile i < n - k + 1
+    begin
+      write(" ");
+      i := i + 1
+    end;
+    j := 1;
+    dowhile j <= 2 * k - 1
+    begin
+      write("*");
+      d := d + 1;
+      j := j + 1
+    end;
+    writeln();
+    k := k - 1
+  end;
+
+    writeln();
+    writeln("Total number of stars in triangle 1: ", t1);
+    writeln("Total number of stars in triangle 2: ", t2);
+    writeln("Total number of stars in diamond: ", d);
+    total := t1 + t2 + d;
+    writeln("Total number of stars in all patterns: ", total);
+    writeln()
+end.

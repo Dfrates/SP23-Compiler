@@ -1,0 +1,338 @@
+dfrates@Daniels-MacBook-Pro FRATES_HW3A_jar % java -jar FRATES_HW3A.jar SyntaxB-BAD.txt SymbolTable.txt
+Daniel Frates, 7310, CS4100/5100, SPRING 2023
+INPUT FILE TO PROCESS IS: SyntaxB-BAD.txt
+0001 UNIT BAD3B;
+        UNITT |         0017 |  UNIT
+--> Entering Program
+        IDENT |         0050 |  BAD3B
+        SEMIC |         0036 |  ;
+0002 (* This Part 3B test file has errors listed below *)
+0003 VAR COUNT, TOTAL : INTEGER;
+        VARBL |         0015 |  VAR
+ --> Entering Block
+        IDENT |         0050 |  COUNT
+  --> Entering VariableDecSec
+   --> Entering VariableDeclaration
+    --> Entering Identifier
+        COMMA |         0044 |  ,
+    <-- Exiting Identifier
+        IDENT |         0050 |  TOTAL
+    --> Entering Identifier
+        COLON |         0047 |  :
+    <-- Exiting Identifier
+        ITYPE |         0001 |  INTEGER
+    --> Entering SimpleType
+        SEMIC |         0036 |  ;
+    <-- Exiting SimpleType
+0004 VAR STOP : INTEGER;
+        VARBL |         0015 |  VAR
+   <-- Exiting VariableDeclaration
+  <-- Exiting VariableDecSec
+        IDENT |         0050 |  STOP
+  --> Entering VariableDecSec
+   --> Entering VariableDeclaration
+    --> Entering Identifier
+        COLON |         0047 |  :
+    <-- Exiting Identifier
+        ITYPE |         0001 |  INTEGER
+    --> Entering SimpleType
+        SEMIC |         0036 |  ;
+    <-- Exiting SimpleType
+0005 BEGIN
+        BEGIN |         0013 |  BEGIN
+   <-- Exiting VariableDeclaration
+  <-- Exiting VariableDecSec
+  --> Entering BlockBody
+0006 READLN(STOP);
+        FETCH |         0012 |  READLN
+   --> Entering Statement
+        LPARN |         0034 |  (
+        IDENT |         0050 |  STOP
+    --> Entering Identifier
+        RPARN |         0035 |  )
+    <-- Exiting Identifier
+        SEMIC |         0036 |  ;
+   <-- Exiting Statement
+0007 TOTAL := 12;
+        IDENT |         0050 |  TOTAL
+   --> Entering Statement
+    --> Entering handleAssignment
+     --> Entering Variable
+      --> Entering Identifier
+        ASIGN |         0037 |  :=
+      <-- Exiting Identifier
+     <-- Exiting Variable
+        INTGR |         0051 |  12
+     --> Entering SimpleExpression
+      --> Entering Term
+       --> Entering Factor
+        --> Entering UnsignedConstant
+         --> Entering UnsignedNumber
+        SEMIC |         0036 |  ;
+         <-- Exiting UnsignedNumber
+        <-- Exiting UnsignedConstant
+       <-- Exiting Factor
+      <-- Exiting term
+     <-- Exiting SimpleExpression
+    <-- Exiting handleAssignment
+   <-- Exiting Statement
+0008 (* I is undeclared, a message to that effect should print, and continue on
+0009 *)
+0010 FOR I := 1 TO STOP DO
+        FORLP |         0009 |  FOR
+   --> Entering Statement
+        IDENT |         0050 |  I
+    --> Entering Variable
+     --> Entering Identifier
+******** Undeclared variable: I on line 10 ********
+        ASIGN |         0037 |  :=
+     <-- Exiting Identifier
+    <-- Exiting Variable
+        INTGR |         0051 |  1
+    --> Entering SimpleExpression
+     --> Entering Term
+      --> Entering Factor
+       --> Entering UnsignedConstant
+        --> Entering UnsignedNumber
+        TRGTO |         0004 |  TO
+        <-- Exiting UnsignedNumber
+       <-- Exiting UnsignedConstant
+      <-- Exiting Factor
+     <-- Exiting term
+    <-- Exiting SimpleExpression
+        IDENT |         0050 |  STOP
+    --> Entering SimpleExpression
+     --> Entering Term
+      --> Entering Factor
+       --> Entering Variable
+        --> Entering Identifier
+        PERFM |         0005 |  DO
+        <-- Exiting Identifier
+       <-- Exiting Variable
+      <-- Exiting Factor
+     <-- Exiting term
+    <-- Exiting SimpleExpression
+0011 BEGIN
+        BEGIN |         0013 |  BEGIN
+    --> Entering Statement
+     --> Entering BlockBody
+0012 TOTAL := TOTAL + I
+        IDENT |         0050 |  TOTAL
+      --> Entering Statement
+       --> Entering handleAssignment
+        --> Entering Variable
+         --> Entering Identifier
+        ASIGN |         0037 |  :=
+         <-- Exiting Identifier
+        <-- Exiting Variable
+        IDENT |         0050 |  TOTAL
+        --> Entering SimpleExpression
+         --> Entering Term
+          --> Entering Factor
+           --> Entering Variable
+            --> Entering Identifier
+        PLUSS |         0032 |  +
+            <-- Exiting Identifier
+           <-- Exiting Variable
+          <-- Exiting Factor
+         <-- Exiting term
+         --> Entering AddOp
+        IDENT |         0050 |  I
+         <-- Exiting AddOp
+         --> Entering Term
+          --> Entering Factor
+           --> Entering Variable
+            --> Entering Identifier
+0013 END;
+        STOPP |         0014 |  END
+            <-- Exiting Identifier
+           <-- Exiting Variable
+          <-- Exiting Factor
+         <-- Exiting term
+        <-- Exiting SimpleExpression
+       <-- Exiting handleAssignment
+      <-- Exiting Statement
+        SEMIC |         0036 |  ;
+     <-- Exiting BlockBody
+    <-- Exiting Statement
+   <-- Exiting Statement
+0014 (* Things go bad, not a statement start below, show EXPECTED,
+0015 set ANYERRORS true, and resynch with statement-level parsing*)
+0016 UNTIl TOTAL <= 20;
+        UNTIL |         0020 |  UNTIl
+   --> Entering Statement
+ERROR: Expected Statement start but found UNTIl on line: 16
+   <-- Exiting Statement
+        IDENT |         0050 |  TOTAL
+        LTEQL |         0041 |  <=
+        INTGR |         0051 |  20
+        SEMIC |         0036 |  ;
+0017 (*Should find the following as a good statement *)
+0018 IF TOTAL > 15 then
+        CNDTN |         0006 |  IF
+   --> Entering Statement
+        IDENT |         0050 |  TOTAL
+    --> Entering RelExpression
+     --> Entering SimpleExpression
+      --> Entering Term
+       --> Entering Factor
+        --> Entering Variable
+         --> Entering Identifier
+        GREAT |         0038 |  >
+         <-- Exiting Identifier
+        <-- Exiting Variable
+       <-- Exiting Factor
+      <-- Exiting term
+     <-- Exiting SimpleExpression
+     --> Entering RelOp
+        INTGR |         0051 |  15
+     <-- Exiting RelOp
+     --> Entering SimpleExpression
+      --> Entering Term
+       --> Entering Factor
+        --> Entering UnsignedConstant
+         --> Entering UnsignedNumber
+        HENCE |         0007 |  then
+         <-- Exiting UnsignedNumber
+        <-- Exiting UnsignedConstant
+       <-- Exiting Factor
+      <-- Exiting term
+     <-- Exiting SimpleExpression
+    <-- Exiting RelExpression
+0019 BEGIN
+        BEGIN |         0013 |  BEGIN
+    --> Entering Statement
+     --> Entering BlockBody
+0020 DOWHILE TOTAL > 10
+        DOWHI |         0016 |  DOWHILE
+      --> Entering Statement
+        IDENT |         0050 |  TOTAL
+       --> Entering RelExpression
+        --> Entering SimpleExpression
+         --> Entering Term
+          --> Entering Factor
+           --> Entering Variable
+            --> Entering Identifier
+        GREAT |         0038 |  >
+            <-- Exiting Identifier
+           <-- Exiting Variable
+          <-- Exiting Factor
+         <-- Exiting term
+        <-- Exiting SimpleExpression
+        --> Entering RelOp
+        INTGR |         0051 |  10
+        <-- Exiting RelOp
+        --> Entering SimpleExpression
+         --> Entering Term
+          --> Entering Factor
+           --> Entering UnsignedConstant
+            --> Entering UnsignedNumber
+0021 TOTAL := TOTAL - (12323)
+        IDENT |         0050 |  TOTAL
+            <-- Exiting UnsignedNumber
+           <-- Exiting UnsignedConstant
+          <-- Exiting Factor
+         <-- Exiting term
+        <-- Exiting SimpleExpression
+       <-- Exiting RelExpression
+       --> Entering Statement
+        --> Entering handleAssignment
+         --> Entering Variable
+          --> Entering Identifier
+        ASIGN |         0037 |  :=
+          <-- Exiting Identifier
+         <-- Exiting Variable
+        IDENT |         0050 |  TOTAL
+         --> Entering SimpleExpression
+          --> Entering Term
+           --> Entering Factor
+            --> Entering Variable
+             --> Entering Identifier
+        MINUS |         0033 |  -
+             <-- Exiting Identifier
+            <-- Exiting Variable
+           <-- Exiting Factor
+          <-- Exiting term
+          --> Entering AddOp
+        LPARN |         0034 |  (
+          <-- Exiting AddOp
+          --> Entering Term
+           --> Entering Factor
+        INTGR |         0051 |  12323
+            --> Entering SimpleExpression
+             --> Entering Term
+              --> Entering Factor
+               --> Entering UnsignedConstant
+                --> Entering UnsignedNumber
+        RPARN |         0035 |  )
+                <-- Exiting UnsignedNumber
+               <-- Exiting UnsignedConstant
+              <-- Exiting Factor
+             <-- Exiting term
+            <-- Exiting SimpleExpression
+0022 END
+        STOPP |         0014 |  END
+           <-- Exiting Factor
+          <-- Exiting term
+         <-- Exiting SimpleExpression
+        <-- Exiting handleAssignment
+       <-- Exiting Statement
+      <-- Exiting Statement
+0023 ELSE
+        OTHRW |         0008 |  ELSE
+     <-- Exiting BlockBody
+    <-- Exiting Statement
+0024 IF TOTAL < 12 THEN
+        CNDTN |         0006 |  IF
+    --> Entering Statement
+        IDENT |         0050 |  TOTAL
+     --> Entering RelExpression
+      --> Entering SimpleExpression
+       --> Entering Term
+        --> Entering Factor
+         --> Entering Variable
+          --> Entering Identifier
+        LSTHN |         0039 |  <
+          <-- Exiting Identifier
+         <-- Exiting Variable
+        <-- Exiting Factor
+       <-- Exiting term
+      <-- Exiting SimpleExpression
+      --> Entering RelOp
+        INTGR |         0051 |  12
+      <-- Exiting RelOp
+      --> Entering SimpleExpression
+       --> Entering Term
+        --> Entering Factor
+         --> Entering UnsignedConstant
+          --> Entering UnsignedNumber
+        HENCE |         0007 |  THEN
+          <-- Exiting UnsignedNumber
+         <-- Exiting UnsignedConstant
+        <-- Exiting Factor
+       <-- Exiting term
+      <-- Exiting SimpleExpression
+     <-- Exiting RelExpression
+0025 WRITELN(TOTAL);
+        WRITE |         0011 |  WRITELN
+     --> Entering Statement
+        LPARN |         0034 |  (
+        IDENT |         0050 |  TOTAL
+      --> Entering Identifier
+        RPARN |         0035 |  )
+      <-- Exiting Identifier
+        SEMIC |         0036 |  ;
+     <-- Exiting Statement
+    <-- Exiting Statement
+   <-- Exiting Statement
+0026 END.
+        STOPP |         0014 |  END
+   --> Entering Statement
+ERROR: Expected Statement start but found END on line: 26
+   <-- Exiting Statement
+        PRIOD |         0048 |  .
+  <-- Exiting BlockBody
+ <-- Exiting Block
+Compilation failed.
+<-- Exiting Program
+Done.

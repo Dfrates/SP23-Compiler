@@ -1,0 +1,59 @@
+NUMBER Psuedocode
+Daniel Frates
+
+
+String GetNextToken() { 
+    token = "";
+    currentChar = getNextChar();
+
+    if (!isDigit(currentChar)) {  // if the current character is not a digit then return an empty string
+        return token;
+    }
+
+    if (isDigit(currentChar)) {      // while the current character is a digit
+        token += currentChar;   // add the current character to the token
+        currentChar = getNextChar();    // get the next character
+
+        while(isDigit(currentChar) && currentChar != '.') {    // while the current character is a digit and not a decimal point
+            token += currentChar;   // add the current character to the token
+            currentChar = getNextChar();    // get the next character
+        }
+
+        if (currentChar == '.') {   // if the current character is a decimal point
+            token += currentChar;   // add the current character to the token
+            currentChar = getNextChar();    // get the next character
+
+            if (!isDigit(currentChar) || currentChar != 'E') {      // if the current character is not a digit then return an empty string
+                break;
+            }
+
+            while (isDigit(currentChar)) {      // while the current character is a digit
+                token += currentChar;   // add the current character to the token
+                currentChar = getNextChar();    // get the next character
+            }
+
+            if (currentChar == 'E') {   // if exponent 
+                token += currentChar;  // add the current character to the token
+                currentChar = getNextChar();    // get the next character
+
+                if (!isDigit(currentChar)) {      // if the current character is not a digit then error
+                    token = "ERROR";   // return an error
+                    break;
+                }
+
+                while (isDigit(currentChar)) {      // while the current character is a digit
+                    token += currentChar;   // add the current character to the token
+                    currentChar = getNextChar();    // get the next character
+                }
+
+                if (!isDigit(currentChar)) {     // if the current character is not a digit then break
+                    break;
+                }
+
+            }
+        }
+    }
+
+    return token;
+
+}

@@ -1,0 +1,86 @@
+unit FizzyBuzzy;
+
+var i, count, fizzy, buzzy, n, userInput: integer;
+
+begin
+
+    write("Enter a number for sequence: ");
+    readln(n);
+
+    {* Check if n is greater than 2 *}
+    if n >= 2 then
+    begin
+      n := n + 1;
+      writeln();
+      writeln("FizzBuzz Sequence");
+      writeln("==================================")
+    end
+    else
+    begin
+      writeln("==================================");
+      writeln("Input must be greater than 2");
+      writeln("==================================");
+      writeln();
+      writeln("Do another sequence?");
+      writeln("['1' for yes]");
+      writeln("['0' for no]");
+      write("Enter your choice: ");
+      readln(userInput);
+      writeln("==================================");
+      writeln();
+      if userInput = 1 then goto(0)
+    end;
+
+  {* Loop through the sequence *}
+  for i := 1 to n do
+  begin
+    fizzy := 0;
+    buzzy := 0;
+
+    {* Check if i is a multiple of 3 *}
+    count := 0;
+    dowhile count < i
+    begin
+      count := count + 3;
+      if count = i then fizzy := 1
+    end;
+
+    {* Check if i is a multiple of 5 *}
+    count := 0;
+    dowhile count < i
+    begin
+      count := count + 5;
+      if count = i then buzzy := 1
+    end;
+
+    {* Output the string *}
+    if fizzy = 1 then
+    begin
+      if buzzy = 1 then
+        write("FizzBuzz")
+      else
+        write("Fizz")
+    end
+
+    else if buzzy = 1 then
+      write("Buzz")
+    else
+      write(i);
+
+    write(", ")
+  end;
+  writeln();
+  writeln();
+
+  {* Ask user if they want to do another sequence *}
+  writeln("==================================");
+  writeln("Do another sequence?");
+  writeln("['1' for yes]");
+  writeln("['0' for no]");
+  write("Enter your choice: ");
+  readln(userInput);
+  writeln("==================================");
+  writeln();
+  if userInput = 1 then goto(0)
+
+end.
